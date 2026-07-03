@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Pawnshop Manager{% endblock %}
+{% block content %}
+
+<h2 class="page-title pb-3" >Dashboard</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3 ">
+    <div class="card fw-bold shadow card-stat p-4 gradient-card border border-3 border-primary border-opacity-75">
+      <div class="stat-label ">Active Loans</div>
+      <div class="stat-value">{{ active_loan_count }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow fw-bold p-4 gradient-card-2 border border-3 border-warning border-opacity-75" style="border-left-color: var(--danger);">
+      <div class="stat-label">Overdue Loans</div>
+      <div class="stat-value">{{ overdue_loan_count }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow fw-bold p-4 gradient-card border border-3 border-primary border-opacity-75">
+      <div class="stat-label">Outstanding (Principal + Interest)</div>
+      <div class="stat-value">₹{{ total_outstanding|floatformat:0 }}</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow fw-bold p-4 gradient-card-2 border border-3 border-warning border-opacity-75">
+      <div class="stat-label">Today's Collections</div>
+      <div class="stat-value">₹{{ todays_collection_total|floatformat:0 }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header bg-primary-subtle"><strong>Loans Due Soonest / Overdue</strong></div>
+      <div class="table-responsive">
+        <table class="table table-pawn table-hover table-striped mb-0">
+          <thead>
+            <tr><th>Loan #</th><th>Customer</th><th>Due Date</th><th>Outstanding</th><th></th></tr>
+          </thead>
+          <tbody>
+            {% for loan in overdue_loans %} 
+            <tr>
+              <td>{{ loan.loan_number }}</td>
+              <td>{{ loan.customer.full_name }}</td>
+              <td>{{ loan.due_date }}</td>
+              <td>₹{{ loan.outstanding_balance|floatformat:0 }}</td>
+              <td><a href="{% url 'loans:detail' loan.pk %}" class="btn btn-sm btn-pawn">View</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-muted text-center py-3">No overdue loans right now.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table> 
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="card mb-3">
+      <div class="card-header bg-info"><strong>Today's Gold/Silver Rate</strong></div>
+      <div class="card-body">
+        <p class="mb-1">Gold 22K: <strong>{% if current_gold_22k %}₹{{ current_gold_22k.rate_per_gram }}/g ({{ current_gold_22k.effective_date }}){% else %}Not set{% endif %}</strong></p>
+        <p class="mb-2">Silver: <strong>{% if current_silver %}₹{{ current_silver.rate_per_gram }}/g ({{ current_silver.effective_date }}){% else %}Not set{% endif %}</strong></p>
+        <a href="{% url 'core:metal_rate_create' %}" class="btn btn-sm btn-gold border border-info btn-grad-small">Update Today's Rate</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-dark-subtle"><strong>Quick Actions</strong></div>
+      <div class="card-body d-flex flex-column gap-2">
+        <a href="{% url 'customers:create' %}" class="btn btn-pawn btn-grad text-white">+ Register New Customer</a>
+        <a href="{% url 'customers:list' %}" class="btn btn-outline-secondary btn-grad-2">Find Customer → Issue New Loan</a>
+        <a href="{% url 'auctions:eligible_list' %}" class="btn btn-outline-danger btn-grad">Review Auction-Eligible Loans</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-4">
+  <div class="card-header bg-info"><strong>Recently Issued Loans</strong></div>
+  <div class="table-responsive">
+    <table class="table table-pawn mb-0 table-striped">
+      <thead><tr><th>Loan #</th><th>Customer</th><th>Item</th><th>Principal</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for loan in recent_loans %}
+        <tr>
+          <td>{{ loan.loan_number }}</td>
+          <td>{{ loan.customer.full_name }}</td>
+          <td>{{ loan.item }}</td>
+          <td>₹{{ loan.principal_amount }}</td>
+          <td><span class="badge badge-status-{{ loan.status|lower }} text-dark border border-warning p-2">{{ loan.get_status_display }}</span></td>
+          <td><a href="{% url 'loans:detail' loan.pk %}">View</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-muted text-center py-3">No loans yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

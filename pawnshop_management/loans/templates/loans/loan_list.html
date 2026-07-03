@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Loans{% endblock %}
+{% block content %}
+<h2 class="page-title">Loans</h2>
+
+<ul class="nav nav-pills mb-3">
+  <li class="nav-item "><a class="nav-link {% if status_filter == 'open' %}active{% endif %} border border-info" href="?status=open">Open</a></li>
+  <li class="nav-item"><a class="nav-link {% if status_filter == 'overdue' %}active{% endif %} border border-info mx-2" href="?status=overdue">Overdue</a></li>
+  <li class="nav-item"><a class="nav-link {% if status_filter == 'closed' %}active{% endif %} border border-info mx-0" href="?status=closed">Closed</a></li>
+  <li class="nav-item"><a class="nav-link {% if status_filter == 'all' %}active{% endif %} border border-info mx-2" href="?status=all">All</a></li>
+</ul>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-pawn table-hover table-striped mb-0">
+      <div class="card-header bg-info"><strong>Lons Records</strong></div>
+      <thead>
+        <tr><th>Loan #</th><th>Customer</th><th>Item</th><th>Principal</th><th>Issued</th><th>Due</th><th>Outstanding</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for loan in loans %}
+        <tr>
+          <td>{{ loan.loan_number }}</td>
+          <td>{{ loan.customer.full_name }}</td>
+          <td>{{ loan.item }}</td>
+          <td>₹{{ loan.principal_amount }}</td>
+          <td>{{ loan.issue_date }}</td>
+          <td>{{ loan.due_date }}</td>
+          <td>₹{{ loan.outstanding_balance|floatformat:0 }}</td>
+          <td><span class="badge badge-status-{{ loan.status|lower }} text-dark border border-warning p-2">{{ loan.get_status_display }}</span></td>
+          <td><a href="{% url 'loans:detail' loan.pk %}" class="btn btn-sm btn-pawn p-1 border border-info link-primary rounded">View</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9" class="text-muted text-center py-3">No loans in this view.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ customer.full_name }}{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <h2 class="page-title mb-0">{{ customer.full_name }}</h2>
+  <div>
+    <a href="{% url 'customers:update' customer.pk %}" class="btn px-3 shadow border border-light btn_h">Edit</a>
+    <a href="{% url 'loans:create' customer.pk %}" class="btn btn-gold shadow border border-light btn_h px-3 mx-2 btn-hover">+ New Loan</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body shadow">
+        {% if customer.photo %}<div class="text-center "><img src="{{ customer.photo.url }}" class="shadow img-fluid rounded mb-3 border w-75" alt="{{ customer.full_name }}"></div>{% endif %}
+        <hr>
+        <p><strong>Phone:</strong> {{ customer.phone_number }}{% if customer.alternate_phone %} / {{ customer.alternate_phone }}{% endif %}</p>
+        {% if customer.email %}<p><strong>Email:</strong> {{ customer.email }}</p>{% endif %}
+        <p><strong>Address:</strong><br>{{ customer.address|linebreaksbr }}</p>
+        <p><strong>ID Proof:</strong> {{ customer.get_id_proof_type_display }} - {{ customer.id_proof_number }}</p>
+        {% if customer.id_proof_document %}<p ><a href="{{ customer.id_proof_document.url }}" class="rounded border border-info p-2 link-primary shadow" target="_blank">View ID Document</a></p>{% endif %}
+        {% if customer.notes %}<p><strong>Notes:</strong><br>{{ customer.notes|linebreaksbr }}</p>{% endif %}
+        <p class="text-muted small">Registered {{ customer.date_registered|date:"d M Y" }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header bg-info d-flex justify-content-between ">
+        <strong>Loan History</strong>
+        <span>Total outstanding: <strong>₹{{ customer.total_outstanding|floatformat:0 }}</strong></span>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-pawn mb-0">
+          <thead><tr><th>Loan #</th><th>Item</th><th>Principal</th><th>Issued</th><th>Due</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            {% for loan in loans %}
+            <tr>
+              <td>{{ loan.loan_number }}</td>
+              <td>{{ loan.item }}</td>
+              <td>₹{{ loan.principal_amount }}</td>
+              <td>{{ loan.issue_date }}</td>
+              <td>{{ loan.due_date }}</td>
+              <td><span class="badge badge-status-{{ loan.status|lower }} border border-warning text-dark p-2">{{ loan.get_status_display }}</span></td>
+              <td><a href="{% url 'loans:detail' loan.pk %}" class="p-1 border border-info link-primary rounded">View</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="text-muted text-center py-3">No loans yet for this customer.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

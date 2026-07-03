@@ -1,0 +1,103 @@
+/* class="p-1 border border-info link-primary rounded" */ 
+/* border border-warning text-dark p-2 */
+
+/* logout style */
+.btn-g {
+  background-image: linear-gradient(to right, #e30f0f 0%, #dfb752 51%, #9e0101 100%);
+  padding: 6px 18px;
+  margin-left: 5px;
+  font-size: 1rem;
+  transition: 0.6s;
+  text-transform: capitalize;
+  background-size: 200% auto;
+  outline: none;
+  color: #644c4c;
+  font-weight: 600;
+}
+.btn-g:hover{
+  background-position: right center;
+  color: #ffffff;
+}
+
+/* buttons hover effects */
+.btn_h{
+  background-image: linear-gradient(to right, #5066e4 0%, #1c0479 51%, #2544df 100%);
+  transition: 0.6s;
+  color: #aaa8b4;
+  font-weight: bold;
+  background-size: 200% auto;
+}
+.btn_h:hover{
+  /* background-color: #4045d1; */
+  background-position: right center;
+  color: #fff;
+}
+
+
+.btn-grad {
+  background-image: linear-gradient(to right, #16A085 0%, #F4D03F 51%, #16A085 100%);
+}
+.btn-grad-small {
+  background-image: linear-gradient(to right, #16A085 0%, #F4D03F 51%, #16A085 100%);
+}
+
+.btn-grad-small {  
+  text-align: center;  
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;  
+  outline: none;
+  border: none;
+}
+
+.btn-grad {
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  outline: none;
+  border: none;
+}
+
+.btn-grad:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-grad-small:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-grad-2 {
+  background-image: linear-gradient(to right, #DA22FF 0%, #9733EE 51%, #DA22FF 100%);
+}
+
+.btn-grad-2 {
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+  outline: none;
+  border: none;
+}
+
+.btn-grad-2:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Customers{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h2 class="page-title flex-grow-1 mb-0">Customers</h2>
+  <a href="{% url 'customers:create' %}" class="btn btn-pawn btn-grad">+ Register New Customer</a>
+</div>
+
+<form method="get" class="mb-3">
+  <div class="input-group" style="max-width: 400px;">
+    <input type="text" name="q" class="form-control border border-info" placeholder="Search name, phone, or ID number" value="{{ query }}">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="table-responsive">
+    <div class="card-header bg-primary-subtle"><strong>All Coustomers</strong></div>
+    <table class="table table-pawn table-hover table-striped mb-0">
+      <thead><tr><th>Name</th><th>Phone</th><th>ID Proof</th><th>Active Loans</th><th>Outstanding</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for customer in customers %}
+        <tr>
+          <td>{{ customer.full_name }}</td>
+          <td>{{ customer.phone_number }}</td>
+          <td>{{ customer.get_id_proof_type_display }} - {{ customer.id_proof_number }}</td>
+          <td>{{ customer.active_loans_count }}</td>
+          <td>₹{{ customer.total_outstanding|floatformat:0 }}</td>
+          <td>
+            <a href="{% url 'customers:detail' customer.pk %}" class="btn btn-sm btn-pawn bg-info border border-dark-subtle">View</a>
+            <a href="{% url 'loans:create' customer.pk %}" class="btn btn-sm btn-gold bg-info border border-dark-subtle">+ New Loan</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-muted text-center py-3">No customers found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

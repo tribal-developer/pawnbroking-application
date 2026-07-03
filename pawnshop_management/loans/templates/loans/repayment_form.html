@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Record Payment - {{ loan.loan_number }}{% endblock %}
+{% block content %}
+<h2 class="page-title fw-bold">Record Payment -- {{ loan.loan_number }}</h2>
+
+<div class="row g-4">
+  <div class="col-md-5">
+    <div class="card shadow">
+      <div class="card-header bg-info"><strong>Current Balance</strong></div>
+      <div class="card-body">
+        <p class="mb-1">Outstanding principal: <strong>₹{{ outstanding_principal|floatformat:2 }}</strong></p>
+        <p class="mb-1">Accrued interest: <strong class="text-danger">₹{{ accrued_interest|floatformat:2 }}</strong></p>
+        <p class="mb-0 fs-5">Total to redeem: <strong class="text-primary">₹{{ outstanding_balance|floatformat:2 }}</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-body shadow">
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+              {{ field }}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+          <p class="form-text">For "Full Redemption", the amount/interest/principal split is recalculated automatically when you save -- whatever you type for those fields will be overridden to clear the loan exactly.</p>
+          <button type="submit" class="btn btn-primary btn-outline-warning">Record Payment</button>
+          <a href="{% url 'loans:detail' loan.pk %}" class="btn btn-outline-danger">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

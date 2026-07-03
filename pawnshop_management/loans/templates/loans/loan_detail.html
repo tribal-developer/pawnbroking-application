@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ loan.loan_number }}{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+  <h2 class="page-title mb-0 fw-bold">Loan {{ loan.loan_number }} <span class="badge badge-status-{{ loan.status|lower }} text-danger border border-warning">{{ loan.get_status_display }}</span></h2>
+  <div>
+    <a href="{% url 'documents:pledge_ticket' loan.pk %}" target="_blank" class="btn btn-outline-info "> <i class="bi bi-printer"></i> Print Pledge Ticket</a>
+    {% if loan.status == 'ACTIVE' or loan.status == 'OVERDUE' %}
+      <a href="{% url 'loans:repay' loan.pk %}?type=interest_only" class="btn btn-warning btn-outline-danger">Pay Interest</a>
+      <a href="{% url 'loans:repay' loan.pk %}?type=full" class="btn btn-primary btn-outline-info">Redeem (Full Payment)</a>
+      <a href="{% url 'loans:renew' loan.pk %}" class="btn btn-outline-primary btn_h">Renew</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-header bg-info"><strong>Customer</strong></div>
+      <div class="card-body">
+        <p class="mb-1"><a href="{% url 'customers:detail' loan.customer.pk %}">{{ loan.customer.full_name }}</a></p>
+        <p class="mb-1 text-muted">{{ loan.customer.phone_number }}</p>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header bg-info"><strong>Pledged Item</strong></div>
+      <div class="card-body">
+        <p class="mb-1">{{ loan.item.get_item_type_display }} -- {{ loan.item.description }}</p>
+        <p class="mb-1">{{ loan.item.get_metal_display }}, {{ loan.item.purity }}, Net weight: {{ loan.item.net_weight_grams }}g</p>
+        <p class="mb-1 fw-bold">Appraised value: ₹{{ loan.item.appraised_value }}</p>
+        <div class="d-flex gap-2 mt-2 flex-wrap ">
+          {% for photo in loan.item.photos.all %}
+            <img src="{{ photo.image.url }}" class="shadow border border-info" style="width:80px;height:80px;object-fit:cover;border-radius:6px;border:1px solid #ddd;">
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-info"><strong>Loan Terms</strong></div>
+      <div class="card-body">
+        <p class="mb-1 fw-bold">Principal: <strong>₹{{ loan.principal_amount }}</strong></p>
+        <p class="mb-1">Interest: {{ loan.interest_rate_percent }}% / month ({{ loan.get_interest_type_display }})</p>
+        <p class="mb-1 text-danger">Issued: {{ loan.issue_date }} &nbsp;|&nbsp; Due: {{ loan.due_date }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-header bg-info"><strong>Balance Summary</strong></div>
+      <div class="card-body">
+        <p class="mb-1">Outstanding principal: <strong>₹{{ outstanding_principal|floatformat:2 }}</strong></p>
+        <p class="mb-1 ">Accrued interest (as of today): <strong class="text-danger">₹{{ accrued_interest|floatformat:2 }}</strong></p>
+        <p class="mb-0 fs-5 ">Total due to redeem: <strong class="text-primary">₹{{ outstanding_balance|floatformat:2 }}</strong></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-info"><strong>Repayment History</strong></div>
+      <div class="table-responsive">
+        <table class="table table-pawn mb-0 table-striped">
+          <thead><tr><th>Receipt</th><th>Date</th><th>Type</th><th>Amount</th><th>Action</th></tr></thead>
+          <tbody>
+            {% for r in repayments %}
+            <tr>
+              <td>{{ r.receipt_number }}</td>
+              <td>{{ r.payment_date }}</td>
+              <td>{{ r.get_payment_type_display }}</td>
+              <td>₹{{ r.amount }}</td>
+              <td><a href="{% url 'documents:repayment_receipt' r.pk %}" target="_blank" class="p-1 border border-info link-primary rounded">Receipt</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-muted text-center py-3">No payments recorded yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

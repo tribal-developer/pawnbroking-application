@@ -1,0 +1,134 @@
+:root {
+  --maroon-deep: #5c1a1b;
+  --maroon: #7a2426;
+  --gold: #b8860b;
+  --gold-light: #936be8;
+  --cream: #faf6ee;
+  --ink: #2b2421;
+  --muted: #7a716a;
+  --danger: #b3261e;
+  --success: #2e6b3e;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.navbar-pawn {
+  background-color: var(--maroon-deep);
+}
+
+.navbar-pawn .navbar-brand {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--gold-light) !important;
+}
+
+.navbar-pawn .nav-link {
+  color: #402279 !important;
+}
+
+.navbar-pawn .nav-link:hover,
+.navbar-pawn .nav-link.active {
+  color: var(--gold-light) !important;
+}
+
+.btn-pawn {
+  background-color: var(--maroon);
+  border-color: var(--maroon);
+  color: #fff;
+}
+
+.btn-pawn:hover {
+  background-color: var(--maroon-deep);
+  border-color: var(--maroon-deep);
+  color: #fff;
+}
+
+.btn-gold {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+.btn-gold:hover {
+  background-color: #96690a;
+  border-color: #96690a;
+  color: #fff;
+}
+
+.card-stat {
+  border: none;
+  border-left: 4px solid var(--gold);
+  background: #fff;
+}
+
+.card-stat .stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--maroon-deep);
+}
+
+.card-stat .stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.badge-status-active { background-color: var(--success); }
+.badge-status-overdue { background-color: var(--danger); }
+.badge-status-redeemed { background-color: var(--muted); }
+.badge-status-auctioned { background-color: #444; }
+
+.table-pawn thead {
+  background-color: var(--maroon-deep);
+  color: #fff;
+}
+
+a {
+  color: var(--maroon);
+}
+
+a:hover {
+  color: var(--maroon-deep);
+}
+
+.page-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--maroon-deep);
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Django's default form widgets don't carry Bootstrap classes -- style them
+   generically here so every form looks consistent without needing
+   django-crispy-forms or manual widget attrs on every field. */
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="number"],
+form input[type="tel"],
+form input[type="date"],
+form input[type="file"],
+form select,
+form textarea {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #ccc2b6;
+  border-radius: 0.375rem;
+  background-color: #fff;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 0.2rem rgba(184, 134, 11, 0.2);
+}

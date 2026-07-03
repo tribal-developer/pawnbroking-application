@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Record Auction - {{ loan.loan_number }}{% endblock %}
+{% block content %}
+<h2 class="page-title">Record Auction -- {{ loan.loan_number }}</h2>
+
+<div class="row g-4">
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-body">
+        <p class="mb-1"><strong>Customer:</strong> {{ loan.customer.full_name }}</p>
+        <p class="mb-1"><strong>Item:</strong> {{ loan.item }}</p>
+        <p class="mb-0"><strong>Amount owed (principal + interest):</strong> ₹{{ amount_owed|floatformat:2 }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+              {{ field }}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+          <p class="form-text">If sale amount exceeds what was owed, the surplus is flagged for return to the customer -- check your local regulations on this requirement.</p>
+          <button type="submit" class="btn btn-pawn">Record Auction &amp; Close Loan</button>
+          <a href="{% url 'auctions:eligible_list' %}" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

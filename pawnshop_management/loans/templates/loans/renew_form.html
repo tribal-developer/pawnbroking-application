@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Renew Loan - {{ loan.loan_number }}{% endblock %}
+{% block content %}
+<h2 class="page-title">Renew Loan -- {{ loan.loan_number }}</h2>
+
+<div class="card" style="max-width: 480px;">
+  <div class="card-body">
+    <p>Current due date: <strong>{{ loan.due_date }}</strong></p>
+    <p>Accrued interest to be settled now: <strong>₹{{ accrued_interest|floatformat:2 }}</strong></p>
+    <p class="form-text mb-3">Renewing will record this interest as paid and push the due date forward. Principal stays outstanding.</p>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-pawn">Confirm Renewal</button>
+      <a href="{% url 'loans:detail' loan.pk %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

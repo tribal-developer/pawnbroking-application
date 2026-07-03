@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}New Loan - {{ customer.full_name }}{% endblock %}
+{% block content %}
+<h2 class="page-title">New Pledge / Loan for {{ customer.full_name }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white"><strong>Item Details</strong></div>
+        <div class="card-body">
+          {% for field in item_form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+              {{ field }}
+              {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+          <div class="mb-3">
+            <label class="form-label">Item Photos</label>
+            <input type="file" name="photos" multiple>
+            <div class="form-text">Optional, but recommended -- protects both shop and customer in disputes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-header bg-white"><strong>Loan Terms</strong></div>
+        <div class="card-body">
+          {% for field in loan_form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+              {{ field }}
+              {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+          <p class="text-muted small">Tip: shop policy is typically to lend ~{{ default_ltv|default:"75" }}% of appraised value -- adjust as needed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <button type="submit" class="btn btn-pawn">Create Loan &amp; Print Pledge Ticket</button>
+    <a href="{% url 'customers:detail' customer.pk %}" class="btn btn-outline-secondary">Cancel</a>
+  </div>
+</form>
+{% endblock %}
